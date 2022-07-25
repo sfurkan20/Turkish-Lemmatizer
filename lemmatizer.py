@@ -2,6 +2,7 @@ import re
 import json
 import pickle
 import sys
+import os
 
 def check(root, suffix, guess, action):
     if action == "unsuz yumusamasi":
@@ -101,7 +102,7 @@ def checkSuffixValidation(suff):
 
 def main(word):
     try:
-        with open('revisedDict.pkl', 'rb') as f:
+        with open(os.path.join(os.path.dirname(__file__), 'revisedDict.pkl'), 'rb') as f:
             revisedDict = pickle.load(f)
     except IOError:
         print("Please run trainLexicon.py to generate revisedDict.pkl file")
