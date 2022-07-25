@@ -11,7 +11,7 @@ import os
 #wordDict = {"word_1":["kok","word_2"], "word_2":["kok","word_2"], "dif_word_1":["kok","diff_word_1"]}
 def loadWord(dataset):
     datasetPath = os.path.join(os.path.dirname(__file__), 'Datasets')
-    
+
     if dataset == "wiktionary":
         with open(os.path.join(datasetPath, 'wiktionary.pkl'),'rb') as f:
             [wordList] = pickle.load(f)
@@ -27,6 +27,7 @@ def loadWord(dataset):
         for word, valueList in zarganDict.items():
             word = word.replace("â","a")
             wordDict[findID(wordDict, word)] = ["kok",findID(wordDict, word)]
+
         return wordDict
 
 #finds correct id for given word
@@ -131,31 +132,28 @@ def appendDict(revisedDict, newDict):
             revisedDict[kelime] = valueList
     return revisedDict	
 
-dataset="zargan"
-if(len(sys.argv)>1):
-	dataset = sys.argv[1]
+def main(dataset="zargan"):
+    wordDict = loadWord(dataset)
+    wordDict = appendDict(wordDict, (generate(wordDict,"olumsuzluk eki")))
+    print("Negative verbs are added.")
+    wordDict = appendDict(wordDict, (generate(wordDict,"fiil")))
+    print("Zero infinitive forms of verbs are added.")
+    revisedDict = dict(wordDict)
+    for olay in ["unsuz yumusamasi","unlu daralmasi","unlu dusmesi"]:
+        newDict = {}
+        newDict = generate(wordDict,olay)
+        revisedDict = appendDict(revisedDict,newDict)
+        if olay=="unsuz yumusamasi":
+            print("Consonant softening forms are added.")
+        if olay=="unlu daralmasi":
+            print("Becoming close vowel forms are added.")
+        if olay=="unsuz yumusamasi":
+            print("Dropping vowel forms are added.")
 
-wordDict = loadWord(dataset)
-wordDict = appendDict(wordDict, (generate(wordDict,"olumsuzluk eki")))
-print("Negative verbs are added.")
-wordDict = appendDict(wordDict, (generate(wordDict,"fiil")))
-print("Zero infinitive forms of verbs are added.")
-revisedDict = dict(wordDict)
-for olay in ["unsuz yumusamasi","unlu daralmasi","unlu dusmesi"]:
-    newDict = {}
-    newDict = generate(wordDict,olay)
-    revisedDict = appendDict(revisedDict,newDict)
-    if olay=="unsuz yumusamasi":
-        print("Consonant softening forms are added.")
-    if olay=="unlu daralmasi":
-        print("Becoming close vowel forms are added.")
-    if olay=="unsuz yumusamasi":
-        print("Dropping vowel forms are added.")
+    with open('revisedDict.pkl', 'wb') as f:
+        pickle.dump(revisedDict, f)
 
-with open('revisedDict.pkl', 'wb') as f:
-    pickle.dump(revisedDict, f)
+    print("Transformed lexicon is saved to revisedDict.pkl")
 
-print("Transformed lexicon is saved to revisedDict.pkl")
-
-
-
+if __name__ == "__main__":
+    main()
