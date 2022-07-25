@@ -107,7 +107,7 @@ except IOError:
 
 def main(word):
     findings = findPos(word.lower(), revisedDict)
-    print(findings[0])
+    return findings[0]
             
 if __name__ == "__main__":
     if len(sys.argv) < 1:
