@@ -99,14 +99,15 @@ def checkSuffixValidation(suff):
                 validList = validList+contList
     return len(validList)>0,validList
 
-try:
-	with open('revisedDict.pkl', 'rb') as f:
-		revisedDict = pickle.load(f)
-except IOError:
-	print("Please run trainLexicon.py to generate revisedDict.pkl file")
-
 def main(word):
+    try:
+        with open('revisedDict.pkl', 'rb') as f:
+            revisedDict = pickle.load(f)
+    except IOError:
+        print("Please run trainLexicon.py to generate revisedDict.pkl file")
+
     findings = findPos(word.lower(), revisedDict)
+    
     return findings[0]
             
 if __name__ == "__main__":
