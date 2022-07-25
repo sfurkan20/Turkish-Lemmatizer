@@ -80,6 +80,10 @@ def findPos(kelime,revisedDict):
     output = l+temp
     if len(output)==0:
         output.append([kelime+"_1","çaresiz",kelime+"_1",])
+    
+    for index in range(len(output)):
+        output[index] = output[index][0].split('_')[0]
+        
     return output
 
 def checkSuffixValidation(suff):
@@ -101,12 +105,13 @@ try:
 except IOError:
 	print("Please run trainLexicon.py to generate revisedDict.pkl file")
 
-if(len(sys.argv)<1):
-	print("Please provide a word as a system arguments")
-	sys.exit(0)
-
-word = sys.argv[1]
-print("Possible lemmas for",word,"in ranked order:")
-findings = findPos(word.lower(), revisedDict)
-for finding in findings:
-	print(finding[0])
+def main(word):
+    findings = findPos(word.lower(), revisedDict)
+    print(findings[0])
+            
+if __name__ == "__main__":
+    if len(sys.argv) < 1:
+        print("Please provide a word as a system arguments")
+        sys.exit(0)
+        
+    main(sys.argv[1])
