@@ -3,14 +3,17 @@ import re
 import json
 import pickle
 import sys
+import os
 
 #Pass parameter to identify which lexicon dataset to load
 #Possible lexicons: wiktionary, zargan
 #Returns dictionary with example format below:
 #wordDict = {"word_1":["kok","word_2"], "word_2":["kok","word_2"], "dif_word_1":["kok","diff_word_1"]}
 def loadWord(dataset):
+    datasetPath = os.path.join(os.path.dirname(__file__), 'Datasets')
+    
     if dataset == "wiktionary":
-        with open('Datasets/wiktionary.pkl','rb') as f:
+        with open(os.path.join(datasetPath, 'wiktionary.pkl'),'rb') as f:
             [wordList] = pickle.load(f)
         wordDict = {}
         for i in range(len(wordList)):
@@ -18,7 +21,7 @@ def loadWord(dataset):
             wordDict[findID(wordDict, word)] = ["kok",findID(wordDict, word)]
         return wordDict
     elif dataset == "zargan":
-        with open('Datasets/zargan.pkl','rb') as f:
+        with open(os.path.join(datasetPath, 'zargan.pkl'),'rb') as f:
             zarganDict = pickle.load(f)
         wordDict = {}
         for word, valueList in zarganDict.items():
